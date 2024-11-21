@@ -1,0 +1,113 @@
+#define BLYNK_TEMPLATE_ID "TMPL3BIXR8g70"
+#define BLYNK_TEMPLATE_NAME "AC Lamp Dimmer"
+#define BLYNK_AUTH_TOKEN "e-HH8b7AzqLTjxPZfwmJFni2orlttvtr"
+#define BLYNK_TEMPLATEID "TMPL30yrNuSc "
+#define BLYNK_TEMPLATE_NAME "Temperature Based Fan Speed Control"
+#define BLYNK_AUTH_TOKEN "SsfvGtCtbygY2_-66vs6sXrPEnQupUnl"
+#define BLYNK_PRINT Serial
+#define Button D8
+int read_button;
+int speed;
+int percen;
+float t;
+float h;
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+#include <DHT.h>
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(D0, D1, D2, D3, D4, D5);
+char ssid[] = "Rahul";
+char pass[] = "12345678";
+#define DHTPIN D7 /I D6
+#define DHTTYPE DHT11 //DHT 11
+DHT dht(DHTPIN, DHTTYPE);
+BlynkTimer timer;
+BLYNK
+void sendSensor()
+{
+h = dht.readHumidity();
+t = dht.readTemperature(); // or dht.read Temperature(true) for Fahrenheit
+if (isnan(h) || isnan(t))
+Serial.printIn("Failed to read from DHT sensor!");
+return;
+}
+speed=map(t,0,45.0,255);
+percen=map(speed.0,255,0,100);
+if (percen >=100)
+percen=100;
+b
+Blynk.virtual Write(V0, percen);
+Blynk.virtual Write(V1, t);
+Blynk.virtual Write(V2, h);
+}
+void setup()
+Serial.begin(115200);
+led.begin(16.2);
+led.clear();
+led.setCursor(0,0);
+led.print("Welcome To");
+led.setCursor(0,1);
+led.print(" BIT,Ballarpur");
+delay(2000);
+led.clear();
+led.setCursor(0,0);
+led.print("Temperature Controlled");
+Ied.setCursor(0,1);
+led.print(" AC Fan By 10T");
+delay(2000);
+led.clear();
+led.setCursor(0,0);
+led.print("Connecting to...");
+led.setCursor(0,1);
+led.print(" BLYNK");
+delay(2000);
+Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass, "blynk.cloud", 80);
+led.clear();
+led.setCursor(0,0);
+led.print("BLYNK");
+led.setCursor(0,1);
+led.print(" Connected");
+delay(2000);
+pinMode(D6,0UTPUT);
+pinMode(D8,INPUT_PULLUP);
+dht.begin();
+timer.setInterval(1000L, sendSensor);
+void loop()
+Blynk.run();
+timer.run();
+read_button = digitalRead(Button);
+led.clear();
+led.setCursor(0,0);
+led.print("Temp. =");
+led.print(t);
+led.print(" DC");
+led.setCursor(0,1);
+led.print("Speed =");
+led.print(percen);
+led.print(" %");
+delay(500);
+if (read_button == LOW)
+t = dht.readTemperature();
+speed=map(t,0,45,0,255);
+percen=map(speed.0,255,0,100);
+analogWrite(D6,speed);
+if (percen >=100)
+percen=100;
+)
+led.clear();
+led.setCursor(0,0);
+led.print("Temp. =");
+led.print(t);
+led.print(" DC");
+led.setCursor(0,1);
+led.print("Speed =");
+led.print(percen);
+led.print(" %");
+delay(500);
+}
+void scroll()
+{
+for (int positionCounter = 0; positionCounter < 15; positionCounter++)
+led.scrollDisplayLeft();
+delay(300);
+)
